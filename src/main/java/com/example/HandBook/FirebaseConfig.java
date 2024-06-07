@@ -20,6 +20,7 @@ public class FirebaseConfig {
 
             FirebaseOptions options = new FirebaseOptions.Builder()
                     .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+                    .setDatabaseUrl("https://handbook-1.onrender.com")
                     .build();
 
             FirebaseApp.initializeApp(options);
