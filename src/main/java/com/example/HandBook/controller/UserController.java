@@ -1,5 +1,6 @@
 package com.example.HandBook.controller;
 
+import com.example.HandBook.model.ChangePasswordRequest;
 import com.example.HandBook.model.LoginRequest;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
@@ -22,6 +23,20 @@ public class UserController {
             UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
             return new ResponseEntity<>(userRecord, HttpStatus.OK);
         } catch (FirebaseAuthException e) {
+            return null;
+        }
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<UserRecord> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+        try {
+            UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(changePasswordRequest.getUid())
+                    .setPassword(changePasswordRequest.getNewPassword());
+
+            UserRecord userRecord = FirebaseAuth.getInstance().updateUser(request);
+            return new ResponseEntity<>(userRecord, HttpStatus.OK);
+        } catch (FirebaseAuthException e) {
+            System.out.println("Error updating user: " + e.getMessage());
             return null;
         }
     }
