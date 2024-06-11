@@ -23,7 +23,8 @@ public class UserController {
             UserRecord userRecord = FirebaseAuth.getInstance().createUser(request);
             return new ResponseEntity<>(userRecord, HttpStatus.OK);
         } catch (FirebaseAuthException e) {
-            return null;
+
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -37,7 +38,7 @@ public class UserController {
             return new ResponseEntity<>(userRecord, HttpStatus.OK);
         } catch (FirebaseAuthException e) {
             System.out.println("Error updating user: " + e.getMessage());
-            return null;
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -47,7 +48,7 @@ public class UserController {
             return new ResponseEntity<>(FirebaseAuth.getInstance().getUser(uid), HttpStatus.OK);
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-            return null;
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 }
