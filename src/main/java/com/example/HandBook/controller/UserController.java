@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @PostMapping("/create")
-    public ResponseEntity<UserRecord> createUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> createUser(@RequestBody LoginRequest loginRequest) {
         UserRecord.CreateRequest request = new UserRecord.CreateRequest()
                 .setEmail(loginRequest.getEmail())
                 .setPassword(loginRequest.getPassword());
@@ -24,12 +24,12 @@ public class UserController {
             return new ResponseEntity<>(userRecord, HttpStatus.OK);
         } catch (FirebaseAuthException e) {
 
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<UserRecord> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest changePasswordRequest) {
         try {
             UserRecord.UpdateRequest request = new UserRecord.UpdateRequest(changePasswordRequest.getUid())
                     .setPassword(changePasswordRequest.getNewPassword());
@@ -38,17 +38,17 @@ public class UserController {
             return new ResponseEntity<>(userRecord, HttpStatus.OK);
         } catch (FirebaseAuthException e) {
             System.out.println("Error updating user: " + e.getMessage());
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/{uid}")
-    public ResponseEntity<UserRecord> getUser(@PathVariable String uid) {
+    public ResponseEntity<?> getUser(@PathVariable String uid) {
         try {
             return new ResponseEntity<>(FirebaseAuth.getInstance().getUser(uid), HttpStatus.OK);
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
         }
     }
 }
